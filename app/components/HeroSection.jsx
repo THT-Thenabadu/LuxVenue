@@ -3,20 +3,13 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation"
 import { Search, Calendar, Users, Sparkles, MoveRight } from "lucide-react"
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import React from "react";
-import dayjs from 'dayjs';
-import utc from 'dayjs/plugin/utc';
 
-dayjs.extend(utc);
+
 
 
 export default function HeroSection() {
-    const [value, setValue] = React.useState(dayjs.utc('2022-04-17T15:30'));
+    
 
 
 
@@ -34,11 +27,7 @@ export default function HeroSection() {
                         <div className="w-60   h-5 relative left-5">
                             <label className="">Date picker</label>
 
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                            <Stack spacing={2}>
-                                <DateTimePicker value={value} onChange={setValue} timezone="UTC" />
-                            </Stack>
-                            </LocalizationProvider>
+                            
                           
 
 
@@ -47,6 +36,8 @@ export default function HeroSection() {
                             <label>
                                 Event Type
                             </label>
+
+                            
                            
                         </div>
                         <div className="w-25 h-5">
