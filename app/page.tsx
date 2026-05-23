@@ -1,6 +1,6 @@
 import Image from "next/image";
-import Navbar from "./components/Navbar"
-import Hero from "./components/HeroSection"
+import Navbar from "../components/ui/layout/Navbar"
+import Hero from "../components/ui/layout/HeroSection"
 
 //landing page
 
