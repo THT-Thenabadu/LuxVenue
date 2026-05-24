@@ -4,6 +4,17 @@
 
 @custom-variant dark (&:is(.dark *));
 
+* {
+  scrollbar-width: none;        /* Firefox */
+  -ms-overflow-style: none;     /* Internet Explorer */
+}
+
+*::-webkit-scrollbar {
+  display: none;                /* Chrome, Safari, Edge */
+}
+
+
+
 @theme inline {
     --font-heading: var(--font-sans);
     --font-sans: var(--font-sans);

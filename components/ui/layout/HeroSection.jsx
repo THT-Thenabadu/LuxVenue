@@ -106,11 +106,12 @@ export default function HeroSection() {
 
           {/* search button */}
           <button
-            onClick={handleSearch}
-            className="flex items-center justify-center gap-2 bg-[#001B3C] text-white px-6 py-3 rounded-lg shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-300 ease-out whitespace-nowrap"
-          >
-            <Search size={16} /> Search
-          </button>
+              suppressHydrationWarning
+              onClick={handleSearch}
+              className="flex items-center justify-center gap-2 bg-[#001B3C] text-white px-6 py-3 rounded-lg shadow-md hover:-translate-y-1 hover:shadow-xl transition-all duration-300 ease-out whitespace-nowrap"
+            >
+              <Search size={16} /> Search
+            </button>
 
         </div>
 
