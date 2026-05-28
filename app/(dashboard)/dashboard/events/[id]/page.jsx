@@ -2,24 +2,24 @@
 import { createClient } from "@/lib/supabase/server"
 import { notFound, redirect } from "next/navigation"
 import Link from "next/link"
-import { ArrowLeft, Calendar, Users, MapPin, Clock } from "lucide-react"
+import { ArrowLeft, Calendar, Users, MapPin } from "lucide-react"
 import EventTabs from "./_components/EventTabs"
 import ChecklistTab from "./_components/ChecklistTab"
 import GuestsTab from "./_components/GuestsTab"
 import PaymentsTab from "./_components/PaymentsTab"
 import OverviewTab from "./_components/OverviewTab"
+import MessagesTab from "./_components/MessagesTab"
 
 export default async function EventDetailPage({ params, searchParams }) {
   const supabase = await createClient()
 
   const { id } = await params
-  const tab = searchParams?.tab || "overview"
+  const resolvedSearchParams = await searchParams
+  const tab = resolvedSearchParams?.tab || "overview"
 
-  // check user is logged in
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) redirect("/auth/signin")
 
-  // fetch the event with venue info
   const { data: event } = await supabase
     .from("events")
     .select(`
@@ -38,28 +38,33 @@ export default async function EventDetailPage({ params, searchParams }) {
 
   if (!event) notFound()
 
-  // fetch checklist items
   const { data: checklist } = await supabase
     .from("checklist_items")
     .select("*")
     .eq("event_id", id)
     .order("due_date", { ascending: true })
 
-  // fetch guests
   const { data: guests } = await supabase
     .from("event_guests")
     .select("*")
     .eq("event_id", id)
     .order("created_at", { ascending: false })
 
-  // fetch payments
   const { data: payments } = await supabase
     .from("payments")
     .select("*")
     .eq("event_id", id)
     .order("due_date", { ascending: true })
 
-  // fetch selected packages
+  const { data: messages } = await supabase
+    .from("messages")
+    .select(`
+      *,
+      profiles (full_name, avatar_url)
+    `)
+    .eq("event_id", id)
+    .order("created_at", { ascending: true })
+
   const { data: eventPackages } = await supabase
     .from("event_packages")
     .select(`
@@ -68,12 +73,10 @@ export default async function EventDetailPage({ params, searchParams }) {
     `)
     .eq("event_id", id)
 
-  // calculate progress
   const totalItems = checklist?.length || 0
   const completedItems = checklist?.filter(i => i.is_completed).length || 0
   const progress = totalItems > 0 ? Math.round((completedItems / totalItems) * 100) : 0
 
-  // status colors
   const statusColors = {
     enquiry: "bg-yellow-100 text-yellow-700",
     confirmed: "bg-green-100 text-green-700",
@@ -85,7 +88,6 @@ export default async function EventDetailPage({ params, searchParams }) {
   return (
     <div className="p-6 md:p-10">
 
-      {/* back button */}
       <Link
         href="/dashboard"
         className="flex items-center gap-2 text-sm text-gray-500 hover:text-[#001B3C] transition-colors mb-6"
@@ -93,7 +95,6 @@ export default async function EventDetailPage({ params, searchParams }) {
         <ArrowLeft size={15} /> Back to dashboard
       </Link>
 
-      {/* event header */}
       <div className="bg-white border border-gray-100 rounded-xl p-6 mb-6">
         <div className="flex flex-col md:flex-row md:items-start justify-between gap-4">
 
@@ -128,7 +129,6 @@ export default async function EventDetailPage({ params, searchParams }) {
             </div>
           </div>
 
-          {/* progress */}
           <div className="w-full md:w-48">
             <div className="flex justify-between text-xs text-gray-500 mb-1">
               <span>Event readiness</span>
@@ -148,10 +148,8 @@ export default async function EventDetailPage({ params, searchParams }) {
         </div>
       </div>
 
-      {/* tabs */}
       <EventTabs activeTab={tab} eventId={id} />
 
-      {/* tab content */}
       <div className="mt-6">
         {tab === "overview" && (
           <OverviewTab
@@ -176,6 +174,14 @@ export default async function EventDetailPage({ params, searchParams }) {
           <PaymentsTab
             payments={payments || []}
             eventId={id}
+          />
+        )}
+        {tab === "messages" && (
+          <MessagesTab
+            eventId={id}
+            initialMessages={messages || []}
+            currentUserId={user.id}
+            currentUserName={user.email}
           />
         )}
       </div>
