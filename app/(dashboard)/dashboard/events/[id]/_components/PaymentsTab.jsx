@@ -1,5 +1,9 @@
 // app/(dashboard)/dashboard/events/[id]/_components/PaymentsTab.jsx
+"use client"
+
+import { useState } from "react"
 import { CreditCard, Download, Clock, CheckCircle, AlertCircle } from "lucide-react"
+import { createCheckoutSession } from "@/lib/actions/stripe"
 
 const statusIcons = {
   paid: CheckCircle,
@@ -15,7 +19,9 @@ const statusColors = {
   refunded: "text-blue-500",
 }
 
-export default function PaymentsTab({ payments }) {
+export default function PaymentsTab({ payments = [], eventId }) {
+  const [loadingId, setLoadingId] = useState(null)
+  const [successMessage, setSuccessMessage] = useState("")
 
   const totalPaid = payments
     .filter(p => p.status === "paid")
@@ -25,8 +31,23 @@ export default function PaymentsTab({ payments }) {
     .filter(p => p.status === "pending" || p.status === "overdue")
     .reduce((sum, p) => sum + parseFloat(p.amount || 0), 0)
 
+  async function handlePayNow(paymentId) {
+    setLoadingId(paymentId)
+    await createCheckoutSession(paymentId, eventId)
+    // redirect happens inside the server action
+    // if we get here something went wrong
+    setLoadingId(null)
+  }
+
   return (
     <div className="space-y-6">
+
+      {/* success message */}
+      {successMessage && (
+        <div className="bg-green-50 border border-green-200 text-green-700 px-5 py-4 rounded-xl text-sm">
+          {successMessage}
+        </div>
+      )}
 
       {/* summary cards */}
       <div className="grid grid-cols-2 gap-4">
@@ -90,12 +111,16 @@ export default function PaymentsTab({ payments }) {
                     </div>
 
                     {payment.status === "pending" || payment.status === "overdue" ? (
-                      <button className="bg-[#001B3C] text-white text-xs px-4 py-2 rounded-lg hover:bg-[#1F477B] transition-colors">
-                        Pay now
+                      <button
+                        onClick={() => handlePayNow(payment.id)}
+                        disabled={loadingId === payment.id}
+                        className="bg-[#001B3C] text-white text-xs px-4 py-2 rounded-lg hover:bg-[#1F477B] transition-colors disabled:opacity-70"
+                      >
+                        {loadingId === payment.id ? "Loading..." : "Pay now"}
                       </button>
                     ) : payment.invoice_url ? (
                       
-                       <a href={payment.invoice_url}
+                        <a href={payment.invoice_url}
                         className="flex items-center gap-1 text-xs text-[#1F477B] hover:underline"
                       >
                         <Download size={13} /> Invoice
