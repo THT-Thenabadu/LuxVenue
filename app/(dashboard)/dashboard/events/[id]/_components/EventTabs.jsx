@@ -2,7 +2,7 @@
 "use client"
 
 import Link from "next/link"
-import { LayoutGrid, CheckSquare, Users, CreditCard, MessageSquare } from "lucide-react"
+import { LayoutGrid, CheckSquare, Users, CreditCard, MessageSquare, Clock } from "lucide-react"
 
 const tabs = [
   { id: "overview", label: "Overview", icon: LayoutGrid },
@@ -10,6 +10,7 @@ const tabs = [
   { id: "guests", label: "Guests", icon: Users },
   { id: "payments", label: "Payments", icon: CreditCard },
   { id: "messages", label: "Messages", icon: MessageSquare },
+  { id: "runofshow", label: "Run of show", icon: Clock },
 ]
 
 export default function EventTabs({ activeTab, eventId }) {

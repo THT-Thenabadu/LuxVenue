@@ -9,6 +9,7 @@ import GuestsTab from "./_components/GuestsTab"
 import PaymentsTab from "./_components/PaymentsTab"
 import OverviewTab from "./_components/OverviewTab"
 import MessagesTab from "./_components/MessagesTab"
+import RunOfShowTab from "./_components/RunOfShowTab"
 
 export default async function EventDetailPage({ params, searchParams }) {
   const supabase = await createClient()
@@ -64,6 +65,12 @@ export default async function EventDetailPage({ params, searchParams }) {
     `)
     .eq("event_id", id)
     .order("created_at", { ascending: true })
+
+    const { data: runOfShow } = await supabase
+  .from("run_of_show")
+  .select("*")
+  .eq("event_id", id)
+  .order("order_index", { ascending: true })
 
   const { data: eventPackages } = await supabase
     .from("event_packages")
@@ -184,6 +191,12 @@ export default async function EventDetailPage({ params, searchParams }) {
             currentUserName={user.email}
           />
         )}
+        {tab === "runofshow" && (
+              <RunOfShowTab
+                eventId={id}
+                initialItems={runOfShow || []}
+              />
+            )}
       </div>
 
     </div>
