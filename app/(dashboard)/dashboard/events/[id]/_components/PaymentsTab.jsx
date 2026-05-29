@@ -95,7 +95,11 @@ export default function PaymentsTab({ payments = [], eventId }) {
                         Due {new Date(payment.due_date).toLocaleDateString("en-US", {
                           month: "long", day: "numeric", year: "numeric"
                         })}
-                        {payment.paid_at && ` · Paid ${new Date(payment.paid_at).toLocaleDateString()}`}
+                        {payment.paid_at && ` · Paid ${new Date(payment.paid_at).toLocaleDateString("en-US", {
+                              month: "short",
+                              day: "numeric", 
+                              year: "numeric"
+                            })}`}
                       </p>
                     </div>
                   </div>
