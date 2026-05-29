@@ -29,6 +29,8 @@ export default function ChecklistTab({ eventId, checklist }) {
     if (!newTitle.trim()) return
     setIsAdding(true)
     const result = await addChecklistItem(eventId, newTitle, newDueDate)
+    console.log("Result:", result)        // ← add this
+  console.log("Result item:", result?.item)
     if (result?.item) {
       setItems(prev => [...prev, result.item])
       setNewTitle("")
