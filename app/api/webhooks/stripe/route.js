@@ -2,6 +2,7 @@
 import Stripe from "stripe"
 import { createClient } from "@supabase/supabase-js"
 import { NextResponse } from "next/server"
+import { sendPaymentReceipt } from "@/lib/email"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
 
@@ -77,6 +78,36 @@ export async function POST(request) {
     }
 
     console.log(`Payment ${paymentId} marked as paid`)
+    
+    // get event and planner details for the receipt email
+const { data: eventData } = await supabase
+  .from("events")
+  .select(`
+    name,
+    profiles!events_organiser_id_fkey (full_name, email)
+  `)
+  .eq("id", eventId)
+  .single()
+
+const { data: paymentData } = await supabase
+  .from("payments")
+  .select("type, amount, paid_at")
+  .eq("id", paymentId)
+  .single()
+
+if (eventData && paymentData) {
+  await sendPaymentReceipt({
+    to: eventData.profiles?.email || "",
+    plannerName: eventData.profiles?.full_name || "there",
+    eventName: eventData.name,
+    paymentType: paymentData.type,
+    amount: parseFloat(paymentData.amount).toLocaleString(),
+    paidAt: new Date(paymentData.paid_at).toLocaleDateString("en-US", {
+      month: "long", day: "numeric", year: "numeric"
+    }),
+    eventId,
+  })
+}
   }
 
   return NextResponse.json({ received: true })
