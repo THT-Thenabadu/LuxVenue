@@ -8,10 +8,10 @@ import { MapPin, Users, ArrowRight } from "lucide-react"
 export default async function VenuesPage({ searchParams }) {
   const supabase = await createClient()
 
-  // read filters from the URL
-  const eventType = searchParams?.type || ""
-  const guests = searchParams?.guests || ""
-  const date = searchParams?.date || ""
+  const resolvedSearchParams = await searchParams
+const eventType = resolvedSearchParams?.type || ""
+const guests = resolvedSearchParams?.guests || ""
+const date = resolvedSearchParams?.date || ""
 
   // build the query
   let query = supabase
