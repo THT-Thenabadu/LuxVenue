@@ -2,12 +2,13 @@
 "use client"
 
 import Link from "next/link"
-import { LayoutGrid, Users, CreditCard, MessageSquare } from "lucide-react"
+import { LayoutGrid, Users, CreditCard, MessageSquare, Truck } from "lucide-react"
 
 const tabs = [
   { id: "overview", label: "Overview", icon: LayoutGrid },
   { id: "guests", label: "Guests", icon: Users },
   { id: "payments", label: "Payments", icon: CreditCard },
+  { id: "vendors", label: "Vendors", icon: Truck },
   { id: "messages", label: "Messages", icon: MessageSquare },
 ]
 

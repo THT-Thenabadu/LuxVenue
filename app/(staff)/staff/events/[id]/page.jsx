@@ -8,6 +8,7 @@ import StaffOverviewTab from "./_components/StaffOverviewTab"
 import StaffGuestsTab from "./_components/StaffGuestsTab"
 import StaffMessagesTab from "./_components/StaffMessagesTab"
 import StaffPaymentsTab from "./_components/StaffPaymentsTab"
+import StaffVendorsTab from "./_components/StaffVendorsTab"
 
 export default async function StaffEventDetailPage({ params, searchParams }) {
   const supabase = await createClient()
@@ -77,6 +78,19 @@ export default async function StaffEventDetailPage({ params, searchParams }) {
     completed: "bg-gray-100 text-gray-600",
     cancelled: "bg-red-100 text-red-600",
   }
+
+  const { data: eventVendors } = await supabase
+  .from("event_vendors")
+  .select(`
+    *,
+    vendors (id, name, category, email, phone)
+  `)
+  .eq("event_id", id)
+
+const { data: allVendors } = await supabase
+  .from("vendors")
+  .select("*")
+  .order("name", { ascending: true })
 
   return (
     <div className="p-6 md:p-10">
@@ -155,6 +169,13 @@ export default async function StaffEventDetailPage({ params, searchParams }) {
             initialMessages={messages || []}
             currentUserId={user.id}
             currentUserName={event.profiles?.full_name || user.email}
+          />
+        )}
+                {tab === "vendors" && (
+          <StaffVendorsTab
+            eventId={id}
+            eventVendors={eventVendors || []}
+            allVendors={allVendors || []}
           />
         )}
       </div>

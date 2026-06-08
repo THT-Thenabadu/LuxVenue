@@ -11,12 +11,13 @@ import {
   Settings,
   LogOut,
   ShieldCheck,
+  Truck,
 } from "lucide-react"
 
 const navItems = [
   { href: "/staff/dashboard", icon: LayoutDashboard, label: "Overview" },
   { href: "/staff/events", icon: Calendar, label: "All bookings" },
-  { href: "/staff/venues", icon: Building2, label: "Venues" },
+  { href: "/staff/vendors", icon: Truck, label: "Vendors" },
   { href: "/staff/team", icon: Users, label: "Team" },
   { href: "/staff/settings", icon: Settings, label: "Settings" },
 ]
