@@ -37,6 +37,27 @@ A planner visits the site, searches for venues available on a Saturday in Decemb
 Over the next three months they log back in to upload their guest list, mark off checklist items, message the coordinator when they have questions, and pay their balance when it's due. Two weeks before the event they finalise their run-of-show — a minute by minute schedule of the day.
 On the day, hotel staff open the staff app and see exactly what needs to happen and when. Guests scan a QR code at the entrance to check in. The coordinator can push notifications to all guests — "dinner is served in the main hall."
 After the event the planner receives their final invoice, gets asked for a review, and if it went well, gets a prompt to rebook for next year.
+
+# Final Prototype is done!
+
+✓ Authentication        signup, login, logout, sessions, middleware
+✓ Venue browsing        listing, filtering, detail pages
+✓ Booking flow          4 step multi-form, packages, quote, confirmation
+✓ Event dashboard       overview, checklist, guests, payments, messages, run of show, reviews
+✓ Real-time messages    planner to coordinator chat with Supabase Realtime
+✓ Stripe payments       checkout, webhooks, receipt emails
+✓ Staff dashboard       all events, status management, coordinator tools
+✓ Staff invite system   token based invite, admin API account creation
+✓ Email notifications   booking confirmation, payment receipt, RSVP invites
+✓ Guest RSVP page       public token-based page, dietary preferences
+✓ Vendor management     assign vendors to events, status tracking
+✓ Reviews               star rating, comments, anonymous option
+
+<img width="1917" height="988" alt="image" src="https://github.com/user-attachments/assets/7982eff2-7fc4-4ef9-bbad-22259da1fec0" />
+<img width="1918" height="898" alt="image" src="https://github.com/user-attachments/assets/16696284-a2c7-426e-9261-1235405c6f79" />
+<img width="1918" height="987" alt="image" src="https://github.com/user-attachments/assets/da3fae42-d3c9-4c21-954d-4e9f261b741c" />
+<img width="1918" height="990" alt="image" src="https://github.com/user-attachments/assets/63a1caa9-6619-4335-a4bc-8c83c428d6d7" />
+
     
 
 
