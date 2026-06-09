@@ -10,6 +10,7 @@ import PaymentsTab from "./_components/PaymentsTab"
 import OverviewTab from "./_components/OverviewTab"
 import MessagesTab from "./_components/MessagesTab"
 import RunOfShowTab from "./_components/RunOfShowTab"
+import ReviewTab from "./_components/ReviewTab"
 
 export default async function EventDetailPage({ params, searchParams }) {
   const supabase = await createClient()
@@ -79,6 +80,13 @@ export default async function EventDetailPage({ params, searchParams }) {
       packages (name, category, price)
     `)
     .eq("event_id", id)
+
+    const { data: review } = await supabase
+  .from("reviews")
+  .select("*")
+  .eq("event_id", id)
+  .eq("reviewer_id", user.id)
+  .single()
 
   const totalItems = checklist?.length || 0
   const completedItems = checklist?.filter(i => i.is_completed).length || 0
@@ -197,6 +205,14 @@ export default async function EventDetailPage({ params, searchParams }) {
                 initialItems={runOfShow || []}
               />
             )}
+            {tab === "review" && (
+  <ReviewTab
+    eventId={id}
+    userId={user.id}
+    existingReview={review || null}
+    eventStatus={event.status}
+  />
+)}
       </div>
 
     </div>
